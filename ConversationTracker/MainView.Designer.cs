@@ -79,7 +79,7 @@
             this.lstFiles.Name = "lstFiles";
             this.lstFiles.Size = new System.Drawing.Size(192, 277);
             this.lstFiles.TabIndex = 5;
-            this.lstFiles.SelectedIndexChanged += new System.EventHandler(this.lstFiles_SelectedIndexChanged);
+            this.lstFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstFiles_MouseDoubleClick);
             // 
             // MainView
             // 

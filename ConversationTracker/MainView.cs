@@ -155,7 +155,7 @@ namespace LyncLogger
             }
         }
 
-        private void lstFiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void lstFiles_MouseDoubleClick(object sender, EventArgs e)
         {
             String logFolder = ConversationLogger.getLogFolder();
             String filePrefix = ConversationLogger.logFilePrefix;
