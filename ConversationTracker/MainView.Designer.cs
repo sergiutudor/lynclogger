@@ -34,6 +34,7 @@
             this.minTray = new System.Windows.Forms.Button();
             this.LofFol = new System.Windows.Forms.Button();
             this.LogBoxRich = new System.Windows.Forms.RichTextBox();
+            this.lstFiles = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // LyncLogger
@@ -72,11 +73,20 @@
             this.LogBoxRich.TabIndex = 3;
             this.LogBoxRich.Text = "";
             // 
+            // lstFiles
+            // 
+            this.lstFiles.Location = new System.Drawing.Point(538, 12);
+            this.lstFiles.Name = "lstFiles";
+            this.lstFiles.Size = new System.Drawing.Size(192, 277);
+            this.lstFiles.TabIndex = 5;
+            this.lstFiles.SelectedIndexChanged += new System.EventHandler(this.lstFiles_SelectedIndexChanged);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(544, 338);
+            this.ClientSize = new System.Drawing.Size(744, 338);
+            this.Controls.Add(this.lstFiles);
             this.Controls.Add(this.LogBoxRich);
             this.Controls.Add(this.LofFol);
             this.Controls.Add(this.minTray);
@@ -94,5 +104,6 @@
         private System.Windows.Forms.Button minTray;
         private System.Windows.Forms.Button LofFol;
         private System.Windows.Forms.RichTextBox LogBoxRich;
+        private System.Windows.Forms.ListBox lstFiles;
     }
 }

@@ -20,6 +20,7 @@ namespace LyncLogger
                 AppLogger.GetInstance().onInfo += form.Log;
 
                 Connection = new LyncConnection();
+                Connection.logger.onLog += form.AddConversationFiles;
 
                 Application.EnableVisualStyles();
                 Application.Run(form);

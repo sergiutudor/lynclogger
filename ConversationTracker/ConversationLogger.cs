@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Lync.Model;
@@ -13,7 +14,7 @@ namespace LyncLogger
         private Microsoft.Lync.Model.Conversation.Conversation conversation;
         private static string userHome = System.IO.Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.Personal)).FullName;
         private static string logFileDir = "\\lync\\logs\\";
-        private string logFilePrefix = "log";
+        public static readonly string logFilePrefix = "log-";
         private string logFileName = "";
         private static string logFileExtension = ".txt";
         private string ConversationId;
@@ -54,6 +55,14 @@ namespace LyncLogger
             }
 
             return null;
+        }
+
+        public static Array getConversationsFiles()
+        {
+            DirectoryInfo info = new DirectoryInfo(getLogFolder());
+            FileInfo[] files = info.GetFiles().OrderByDescending(p => p.CreationTime).ToArray();
+
+            return files;
         }
 
         public void EndConversation()
@@ -164,7 +173,7 @@ namespace LyncLogger
 
         private string getFileName()
         {
-            return getLogFolder() + logFilePrefix + "-" + logFileName + logFileExtension;
+            return getLogFolder() + logFilePrefix + logFileName + logFileExtension;
         }
 
         /// <summary>

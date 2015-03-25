@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -29,8 +30,9 @@ namespace LyncLogger
             MaximizeBox = false;
 
             LogBoxRich.ReadOnly = true;
-
-            this.Text += " V"+Program.Version;
+            
+            //Display conversation history
+            displayConversationHistory(ConversationLogger.getConversationsFiles());
         }
 
         private void trayDoubleClick(object sender, EventArgs e)
@@ -106,6 +108,18 @@ namespace LyncLogger
             }
         }
 
+        public void AddConversationFiles(Object source, FileLoggerEventArgs args)
+        {
+            if (lstFiles.InvokeRequired)
+            {
+                lstFiles.Invoke(new MethodInvoker(delegate { displayConversationHistory(ConversationLogger.getConversationsFiles()); }));
+            }
+            else
+            {
+                displayConversationHistory(ConversationLogger.getConversationsFiles());
+            }
+        }
+
         private void addMessge(string mes)
         {
             var message = "\r\n" + mes;
@@ -114,6 +128,46 @@ namespace LyncLogger
             //Scroll to end
             LogBoxRich.SelectionStart = LogBoxRich.Text.Length;
             LogBoxRich.ScrollToCaret();
+        }
+
+        private void displayConversationHistory(Array files)
+        {
+            String perfix = ConversationLogger.logFilePrefix;
+
+            lstFiles.Items.Clear();
+
+            foreach (FileInfo file in files)
+            {
+                var contact = file.Name.Replace(perfix, "");
+
+                String name = "";
+                foreach (char currentChar in contact)
+                {
+                    if (Char.IsUpper(currentChar))
+                    {
+                        name += " " + currentChar;
+                        continue;
+                    }
+                    name += currentChar;
+                }
+
+                lstFiles.Items.Add(name);
+            }
+        }
+
+        private void lstFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            String logFolder = ConversationLogger.getLogFolder();
+            String filePrefix = ConversationLogger.logFilePrefix;
+
+            string filePath = logFolder + filePrefix + lstFiles.SelectedItem.ToString().Replace(" ","");
+            if (!File.Exists(filePath))
+            {
+                System.Windows.Forms.MessageBox.Show("File doesn\'t exists");
+                return;
+            }
+
+            System.Diagnostics.Process.Start(filePath);
         }
     }
 }

@@ -5,9 +5,15 @@ using System.Text;
 
 namespace LyncLogger
 {
+    public class FileLoggerEventArgs : EventArgs
+    {
+        public Array files;
+    }
+
     class FileLogger
     {
         private static String folderSeparator = "\\";
+        public EventHandler<FileLoggerEventArgs> onLog;
 
         public void Log(string message, string file, bool addTimestamp)
         {
@@ -24,6 +30,8 @@ namespace LyncLogger
             {
                 logException(e);
             }
+
+            triggerFileLogEvent();
         }
 
         private void logException(Exception e)
@@ -60,6 +68,23 @@ namespace LyncLogger
                         continue;
                     }
                     System.IO.Directory.CreateDirectory(currentFolder);
+                }
+            }
+            catch (Exception e)
+            {
+                logException(e);
+            }
+        }
+
+        private void triggerFileLogEvent()
+        {
+            try
+            {
+                FileLoggerEventArgs args = new FileLoggerEventArgs();
+
+                if (onLog != null)
+                {
+                    onLog(this, args);
                 }
             }
             catch (Exception e)

@@ -11,7 +11,7 @@ namespace LyncLogger
     {
         private bool connectionActive = false;
         private LyncClient client;
-        FileLogger logger = new FileLogger();
+        public readonly FileLogger logger = new FileLogger();
 
         public LyncConnection()
         {
