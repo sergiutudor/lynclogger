@@ -16,7 +16,7 @@ namespace LyncLogger
         private static string logFileDir = "\\lync\\logs\\";
         public static readonly string logFilePrefix = "log-";
         private string logFileName = "";
-        private static string logFileExtension = ".txt";
+        public static readonly string logFileExtension = ".txt";
         private string ConversationId;
         private Dictionary<String, String> AllNames = new Dictionary<String, String>();
         FileLogger logger = new FileLogger();
@@ -60,7 +60,7 @@ namespace LyncLogger
         public static Array getConversationsFiles()
         {
             DirectoryInfo info = new DirectoryInfo(getLogFolder());
-            FileInfo[] files = info.GetFiles().OrderByDescending(p => p.CreationTime).ToArray();
+            FileInfo[] files = info.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
 
             return files;
         }

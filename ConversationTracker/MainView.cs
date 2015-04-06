@@ -30,6 +30,8 @@ namespace LyncLogger
             MaximizeBox = false;
 
             LogBoxRich.ReadOnly = true;
+
+            Text += " V" + Program.Version;
             
             //Display conversation history
             displayConversationHistory(ConversationLogger.getConversationsFiles());
@@ -139,6 +141,7 @@ namespace LyncLogger
             foreach (FileInfo file in files)
             {
                 var contact = file.Name.Replace(perfix, "");
+                contact = contact.Replace(ConversationLogger.logFileExtension, "");
 
                 String name = "";
                 foreach (char currentChar in contact)
@@ -160,7 +163,7 @@ namespace LyncLogger
             String logFolder = ConversationLogger.getLogFolder();
             String filePrefix = ConversationLogger.logFilePrefix;
 
-            string filePath = logFolder + filePrefix + lstFiles.SelectedItem.ToString().Replace(" ","");
+            string filePath = logFolder + filePrefix + lstFiles.SelectedItem.ToString().Replace(" ", "") + ConversationLogger.logFileExtension;
             if (!File.Exists(filePath))
             {
                 System.Windows.Forms.MessageBox.Show("File doesn\'t exists");
