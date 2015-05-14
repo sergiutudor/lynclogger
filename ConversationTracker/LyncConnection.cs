@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace LyncLogger
 {
@@ -85,9 +86,16 @@ namespace LyncLogger
                 connectionActive = true;
                 AppLogger.GetInstance().Info("new conversation listeners attached");
             }
-            catch (ClientNotFoundException e) // e needs to be decleared so that this does not enter all times
+            catch (ClientNotFoundException) // it needs to be decleared so that this does not enter all times
             {
                 AppLogger.GetInstance().Info("Lynoc not started");
+            }
+            catch (Exception e)
+            {
+                AppLogger.GetInstance().Exception(e);
+                MessageBox.Show("The application crashed!\nYou can find more details in: "+AppLogger.GetInstance().getFileName(), "You broke it :(", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                System.Windows.Forms.Application.Exit();
+                System.Environment.Exit(1);
             }
         }
 

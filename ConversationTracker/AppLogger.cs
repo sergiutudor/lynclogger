@@ -107,7 +107,7 @@ namespace LyncLogger
             }
         }
 
-        private string getFileName()
+        public string getFileName()
         {
             return userHome + logFileDir + logFileName + logFileExtension;
         }

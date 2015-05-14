@@ -59,8 +59,16 @@ namespace LyncLogger
 
         public static Array getConversationsFiles()
         {
-            DirectoryInfo info = new DirectoryInfo(getLogFolder());
-            FileInfo[] files = info.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
+            FileInfo[] files = null;
+            try
+            {
+                DirectoryInfo info = new DirectoryInfo(getLogFolder());
+                files = info.GetFiles().OrderByDescending(p => p.LastWriteTime).ToArray();
+            }
+            catch(Exception)
+            {
+                // do nothing no loggs yet
+            }
 
             return files;
         }

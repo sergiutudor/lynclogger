@@ -39,8 +39,15 @@ namespace LyncLogger
 
         private void trayDoubleClick(object sender, EventArgs e)
         {
-            this.Show();
-            ShowWindow(this.Handle, SW_RESTORE);
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                this.Show();
+                ShowWindow(this.Handle, SW_RESTORE);
+            }
+            else if (FormWindowState.Normal == this.WindowState)
+            {
+                MinimizeTotray(null, null);
+            }
         }
 
         private void onClose(object sender, FormClosingEventArgs e)
@@ -85,10 +92,6 @@ namespace LyncLogger
                 LyncLogger.Visible = true;
                 LyncLogger.ShowBalloonTip(500);
                 this.Hide();
-            }
-            else if (FormWindowState.Normal == this.WindowState)
-            {
-                LyncLogger.Visible = false;
             }
         }
 
@@ -137,6 +140,11 @@ namespace LyncLogger
             String perfix = ConversationLogger.logFilePrefix;
 
             lstFiles.Items.Clear();
+
+            if (files == null) // nofiles to list
+            {
+                return;
+            }
 
             foreach (FileInfo file in files)
             {
