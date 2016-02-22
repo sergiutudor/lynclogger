@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Lync.Model;
 using Microsoft.Lync.Model.Conversation;
 using System.Text.RegularExpressions;
+using System.Timers;
 
 namespace LyncLogger
 {
@@ -19,6 +20,7 @@ namespace LyncLogger
         public static readonly string logFileExtension = ".txt";
         private string ConversationId;
         private Dictionary<String, String> AllNames = new Dictionary<String, String>();
+        private Dictionary<String, String> AddedNames = new Dictionary<String, String>();
         FileLogger logger = new FileLogger();
 
         private static Dictionary<String, ConversationLogger> Instances = new Dictionary<String, ConversationLogger>();
@@ -147,16 +149,9 @@ namespace LyncLogger
                         AppLogger.GetInstance().Info(userName + " already added in conversation");
                         return;
                     }
+                    
+                    addParticipantBuffered(userName);
 
-                    if (AllNames.Count() > 0)
-                    {
-                        logger.Log("-------------------- Added  " + userName + " to conversation --------------------\r\n", getFileName());
-                    }
-
-                    AllNames.Add(userName, userName);
-                    UpdateLogFileName();
-
-                    logger.Log("-------------------- Started Conversation with  " + string.Join(", ", AllNames.Values.ToArray()) + " --------------------\r\n", getFileName());
 
                     ((InstantMessageModality)data.Participant.Modalities[ModalityTypes.InstantMessage]).InstantMessageReceived += myInstantMessageModality_MessageReceived;
                 }
@@ -164,6 +159,41 @@ namespace LyncLogger
             catch(Exception e){
                 AppLogger.GetInstance().Exception(e);
             }
+        }
+
+        private void addParticipantBuffered(String userName)
+        {
+            AddedNames.Add(userName, userName);
+            Timer.SetTimeout(flushAddedParticipants, 1000); // wait for all participants to be added
+        }
+
+        private void flushAddedParticipants()
+        {
+            if (AddedNames.Count == 0)
+            {
+                return;
+            }
+
+            var AddedNamesArr = AddedNames.ToArray();
+            AddedNames.Clear();
+
+            var firstUser = AllNames.Count() == 0;
+            String userName = string.Join(", ", AddedNamesArr); ;
+
+            for (int i=0; i < AddedNamesArr.Length ; i++)
+            {
+                String name = AddedNamesArr[i].Value;
+                AllNames.Add(name, name);
+            }
+
+            if (!firstUser)
+            {
+                logger.Log("-------------------- Added  " + userName + " to conversation --------------------\r\n", getFileName());
+            }
+
+            UpdateLogFileName();
+
+            logger.Log("-------------------- Started Conversation with  " + string.Join(", ", AllNames.Values.ToArray()) + " --------------------\r\n", getFileName());
         }
 
         private void UpdateLogFileName()
@@ -202,6 +232,8 @@ namespace LyncLogger
 
                     string messageToLog = Sender + ": " + outVal;
                     messageToLog = messageToLog.Trim();
+
+                    flushAddedParticipants(); //make sure there are no pending participants
                     logger.Log(messageToLog, getFileName());
                 }
             }
