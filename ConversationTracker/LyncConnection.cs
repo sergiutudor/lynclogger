@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace LyncLogger
 {
-    class LyncConnection : IDisposable
+    public class LyncConnection : IDisposable
     {
         private bool connectionActive = false;
         private LyncClient client;
@@ -112,6 +112,11 @@ namespace LyncLogger
                 logger.EndConversation();
                 logger.Dispose();
             }
+        }
+
+        public LyncClient getLyncClient()
+        {
+            return client;
         }
 
         public void Dispose()

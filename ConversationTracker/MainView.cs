@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Microsoft.Lync.Model;
+using System.Threading;
 
 namespace LyncLogger
 {
@@ -18,7 +20,12 @@ namespace LyncLogger
 
         private const uint SW_RESTORE = 0x09;
 
-        public MainView()
+        private ContactsManager contactsManager;
+
+        private Dictionary<int, Contact> displayedContacts = new Dictionary<int, Contact>();
+        private List<Contact> watchedContacts = new List<Contact>();
+
+        public MainView(LyncConnection Connection)
         {
             InitializeComponent();
             Resize += MainView_Resize;
@@ -32,9 +39,55 @@ namespace LyncLogger
             LogBoxRich.ReadOnly = true;
 
             Text += " V" + Program.Version;
-            
+
+            contactsManager = new ContactsManager(Connection);
+
+            fillContactList();
+
             //Display conversation history
             displayConversationHistory(ConversationLogger.getConversationsFiles());
+
+            Timer.SetInterval(delegate { checkWatched(); }, 5000);
+        }
+
+        private void checkWatched()
+        {
+            int key;
+            for (key = 0; key < watchedContacts.Count; key++)
+            {
+                Contact contact = watchedContacts[key];
+                if (contactsManager.isContactAvailable(contact))
+                {
+                    String displayName = contact.GetContactInformation(ContactInformationType.DisplayName).ToString();
+                    MessageBox.Show(displayName + " is now available for discussions.", "Contact available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    AppLogger.GetInstance().Info(contact.Uri + " appeared online");
+
+                    removeWatchedContact(key);
+                    return;
+                }
+            }
+        }
+
+        private void fillContactList()
+        {
+            var contacts = contactsManager.getAllContacts();
+            SortedDictionary<String, Contact > sortedContacts = new SortedDictionary<String, Contact>();
+            
+            foreach (Contact contact in contacts)
+            {
+                sortedContacts.Add(contact.GetContactInformation(ContactInformationType.DisplayName).ToString(), contact);
+            }
+
+            lstContacts.Items.Clear();
+            displayedContacts.Clear();
+
+            foreach (var nameContact in sortedContacts)
+            {
+                var index = lstContacts.Items.Add(nameContact.Key);
+                displayedContacts.Add(index, nameContact.Value);
+            }
+
         }
 
         private void trayDoubleClick(object sender, EventArgs e)
@@ -179,6 +232,50 @@ namespace LyncLogger
             }
 
             System.Diagnostics.Process.Start(filePath);
+        }
+
+        private void lstContacts_MouseDoubleClick(object sender, EventArgs e)
+        {
+            Contact contact = displayedContacts[lstContacts.SelectedIndex];
+            if (watchedContacts.Contains(contact))
+            {
+                return;
+            }
+            watchedContacts.Add(contact);
+            refreshWatched();
+            AppLogger.GetInstance().Info(contact.Uri + " added to watch list");
+        }
+
+        private void refreshWatched()
+        {
+            lstWatched.Items.Clear();
+            foreach (Contact contact in watchedContacts)
+            {
+                lstWatched.Items.Add(contact.GetContactInformation(ContactInformationType.DisplayName).ToString());
+            }
+        }
+
+        private void refreshWatchedThreadSafe()
+        {
+            if (lstWatched.InvokeRequired)
+            {
+                lstWatched.Invoke(new MethodInvoker(refreshWatched));
+            }
+            else
+            {
+                refreshWatched();
+            }
+        }
+
+        private void lstWatched_MouseDoubleClick(object sender, EventArgs e)
+        {
+            removeWatchedContact(lstWatched.SelectedIndex);
+        }
+
+        private void removeWatchedContact(int index)
+        {
+            watchedContacts.RemoveAt(index);
+            refreshWatchedThreadSafe();
         }
     }
 }

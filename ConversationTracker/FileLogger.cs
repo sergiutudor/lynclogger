@@ -10,7 +10,7 @@ namespace LyncLogger
         public Array files;
     }
 
-    class FileLogger
+    public class FileLogger
     {
         private static String folderSeparator = "\\";
         public EventHandler<FileLoggerEventArgs> onLog;

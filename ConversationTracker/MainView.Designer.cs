@@ -35,6 +35,11 @@
             this.LofFol = new System.Windows.Forms.Button();
             this.LogBoxRich = new System.Windows.Forms.RichTextBox();
             this.lstFiles = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lstContacts = new System.Windows.Forms.ListBox();
+            this.lstWatched = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // LyncLogger
@@ -49,52 +54,114 @@
             // 
             // minTray
             // 
-            this.minTray.Location = new System.Drawing.Point(78, 303);
+            this.minTray.Location = new System.Drawing.Point(52, 508);
+            this.minTray.Margin = new System.Windows.Forms.Padding(4);
             this.minTray.Name = "minTray";
-            this.minTray.Size = new System.Drawing.Size(109, 23);
+            this.minTray.Size = new System.Drawing.Size(145, 28);
             this.minTray.TabIndex = 1;
             this.minTray.Text = "Minimize to tray";
             this.minTray.UseVisualStyleBackColor = true;
             // 
             // LofFol
             // 
-            this.LofFol.Location = new System.Drawing.Point(339, 303);
+            this.LofFol.Location = new System.Drawing.Point(392, 508);
+            this.LofFol.Margin = new System.Windows.Forms.Padding(4);
             this.LofFol.Name = "LofFol";
-            this.LofFol.Size = new System.Drawing.Size(108, 23);
+            this.LofFol.Size = new System.Drawing.Size(144, 28);
             this.LofFol.TabIndex = 2;
             this.LofFol.Text = "Open logs folder";
             this.LofFol.UseVisualStyleBackColor = true;
             // 
             // LogBoxRich
             // 
-            this.LogBoxRich.Location = new System.Drawing.Point(12, 12);
+            this.LogBoxRich.Location = new System.Drawing.Point(16, 425);
+            this.LogBoxRich.Margin = new System.Windows.Forms.Padding(4);
             this.LogBoxRich.Name = "LogBoxRich";
-            this.LogBoxRich.Size = new System.Drawing.Size(520, 278);
+            this.LogBoxRich.Size = new System.Drawing.Size(570, 66);
             this.LogBoxRich.TabIndex = 3;
             this.LogBoxRich.Text = "";
             // 
             // lstFiles
             // 
-            this.lstFiles.Location = new System.Drawing.Point(538, 12);
+            this.lstFiles.ItemHeight = 16;
+            this.lstFiles.Location = new System.Drawing.Point(16, 53);
+            this.lstFiles.Margin = new System.Windows.Forms.Padding(4);
             this.lstFiles.Name = "lstFiles";
-            this.lstFiles.Size = new System.Drawing.Size(192, 277);
+            this.lstFiles.Size = new System.Drawing.Size(255, 340);
             this.lstFiles.TabIndex = 5;
             this.lstFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstFiles_MouseDoubleClick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(13, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(204, 25);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Recent Conversations";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(326, 18);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(117, 25);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "All Contacts";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(326, 244);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(174, 25);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Watched Contacts";
+            // 
+            // lstContacts
+            // 
+            this.lstContacts.ItemHeight = 16;
+            this.lstContacts.Location = new System.Drawing.Point(331, 53);
+            this.lstContacts.Margin = new System.Windows.Forms.Padding(4);
+            this.lstContacts.Name = "lstContacts";
+            this.lstContacts.Size = new System.Drawing.Size(255, 180);
+            this.lstContacts.TabIndex = 9;
+            this.lstContacts.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstContacts_MouseDoubleClick);
+            // 
+            // lstWatched
+            // 
+            this.lstWatched.ItemHeight = 16;
+            this.lstWatched.Location = new System.Drawing.Point(331, 277);
+            this.lstWatched.Margin = new System.Windows.Forms.Padding(4);
+            this.lstWatched.Name = "lstWatched";
+            this.lstWatched.Size = new System.Drawing.Size(255, 116);
+            this.lstWatched.TabIndex = 10;
+            this.lstWatched.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstWatched_MouseDoubleClick);
+            // 
             // MainView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(744, 338);
+            this.ClientSize = new System.Drawing.Size(605, 550);
+            this.Controls.Add(this.lstWatched);
+            this.Controls.Add(this.lstContacts);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lstFiles);
             this.Controls.Add(this.LogBoxRich);
             this.Controls.Add(this.LofFol);
             this.Controls.Add(this.minTray);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainView";
             this.Text = "Lync Logger";
             this.Load += new System.EventHandler(this.MainView_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -105,5 +172,10 @@
         private System.Windows.Forms.Button LofFol;
         private System.Windows.Forms.RichTextBox LogBoxRich;
         private System.Windows.Forms.ListBox lstFiles;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ListBox lstContacts;
+        private System.Windows.Forms.ListBox lstWatched;
+        private System.Windows.Forms.Label label1;
     }
 }

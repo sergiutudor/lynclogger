@@ -178,7 +178,7 @@ namespace LyncLogger
             AddedNames.Clear();
 
             var firstUser = AllNames.Count() == 0;
-            String userName = string.Join(", ", AddedNamesArr); ;
+            String userName = string.Join(", ", AddedNamesArr);
 
             for (int i=0; i < AddedNamesArr.Length ; i++)
             {
