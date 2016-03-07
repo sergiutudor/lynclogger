@@ -7,7 +7,7 @@ namespace LyncLogger
 {
     class Program
     {
-        private static LyncConnection Connection;
+        private static LyncConnection connection;
         public static readonly String Version = "1.3.0";
         
         private static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8DE-65F04E6BDE8F}");
@@ -19,12 +19,13 @@ namespace LyncLogger
             {
                 if (mutex.WaitOne(TimeSpan.Zero, true))
                 {
-                    Connection = new LyncConnection();
+                    connection = new LyncConnection();
 
-                    var form = new MainView(Connection);
+                    var form = new MainView(connection);
                     AppLogger.GetInstance().onInfo += form.Log;
 
-                    Connection.logger.onLog += form.AddConversationFiles;
+                    connection.logger.onLog += form.AddConversationFiles;
+                    connection.watchConnection();
 
                     Application.EnableVisualStyles();
                     Application.Run(form);

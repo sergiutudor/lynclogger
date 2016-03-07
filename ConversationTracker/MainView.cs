@@ -42,7 +42,7 @@ namespace LyncLogger
 
             contactsManager = new ContactsManager(Connection);
 
-            fillContactList();
+            tryFillCOntactList();
 
             //Display conversation history
             displayConversationHistory(ConversationLogger.getConversationsFiles());
@@ -87,7 +87,30 @@ namespace LyncLogger
                 var index = lstContacts.Items.Add(nameContact.Key);
                 displayedContacts.Add(index, nameContact.Value);
             }
+        }
 
+        private void fillContactListThreadSafe()
+        {
+            if (lstContacts.InvokeRequired)
+            {
+                lstContacts.Invoke(new MethodInvoker(fillContactList));
+            }
+            else
+            {
+                fillContactList();
+            }
+        }
+
+        private void tryFillCOntactList()
+        {
+            try
+            {
+                fillContactListThreadSafe();
+            }
+            catch (Exception e)
+            {
+                Timer.SetTimeout(tryFillCOntactList, 1000);
+            }
         }
 
         private void trayDoubleClick(object sender, EventArgs e)

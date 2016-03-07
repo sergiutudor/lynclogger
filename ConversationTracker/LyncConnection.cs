@@ -16,10 +16,9 @@ namespace LyncLogger
 
         public LyncConnection()
         {
-            watchConnection();
         }
 
-        private void watchConnection()
+        public void watchConnection()
         {
             if (!connectionActive)
             {
