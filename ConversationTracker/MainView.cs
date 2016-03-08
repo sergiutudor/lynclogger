@@ -58,12 +58,12 @@ namespace LyncLogger
                 Contact contact = watchedContacts[key];
                 if (contactsManager.isContactAvailable(contact))
                 {
+                    removeWatchedContact(key);
+
                     String displayName = contact.GetContactInformation(ContactInformationType.DisplayName).ToString();
                     MessageBox.Show(displayName + " is now available for discussions.", "Contact available", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     AppLogger.GetInstance().Info(contact.Uri + " appeared online");
 
-                    removeWatchedContact(key);
                     return;
                 }
             }
