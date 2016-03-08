@@ -40,6 +40,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lstContacts = new System.Windows.Forms.ListBox();
             this.lstWatched = new System.Windows.Forms.ListBox();
+            this.contactsRefreshIcon = new System.Windows.Forms.PictureBox();
+            this.refreshContactsToolTip = new System.Windows.Forms.ToolTip(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.contactsRefreshIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // LyncLogger
@@ -141,11 +144,33 @@
             this.lstWatched.TabIndex = 10;
             this.lstWatched.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstWatched_MouseDoubleClick);
             // 
+            // contactsRefreshIcon
+            // 
+            this.contactsRefreshIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.contactsRefreshIcon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.contactsRefreshIcon.Image = global::LyncLogger.Properties.Resources.Refresh_icon;
+            this.contactsRefreshIcon.Location = new System.Drawing.Point(529, 27);
+            this.contactsRefreshIcon.Name = "contactsRefreshIcon";
+            this.contactsRefreshIcon.Size = new System.Drawing.Size(20, 20);
+            this.contactsRefreshIcon.TabIndex = 11;
+            this.contactsRefreshIcon.TabStop = false;
+            this.refreshContactsToolTip.SetToolTip(this.contactsRefreshIcon, "Refresh contacts list to see latest contacts.");
+            this.contactsRefreshIcon.Click += new System.EventHandler(this.contactsRefreshIcon_Click);
+            // 
+            // refreshContactsToolTip
+            // 
+            this.refreshContactsToolTip.AutoPopDelay = 5000;
+            this.refreshContactsToolTip.InitialDelay = 500;
+            this.refreshContactsToolTip.ReshowDelay = 100;
+            this.refreshContactsToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.refreshContactsToolTip.ToolTipTitle = "Refresh";
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(605, 550);
+            this.Controls.Add(this.contactsRefreshIcon);
             this.Controls.Add(this.lstWatched);
             this.Controls.Add(this.lstContacts);
             this.Controls.Add(this.label3);
@@ -160,6 +185,7 @@
             this.Name = "MainView";
             this.Text = "Lync Logger";
             this.Load += new System.EventHandler(this.MainView_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.contactsRefreshIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,5 +203,7 @@
         private System.Windows.Forms.ListBox lstContacts;
         private System.Windows.Forms.ListBox lstWatched;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox contactsRefreshIcon;
+        private System.Windows.Forms.ToolTip refreshContactsToolTip;
     }
 }

@@ -300,5 +300,10 @@ namespace LyncLogger
             watchedContacts.RemoveAt(index);
             refreshWatchedThreadSafe();
         }
+
+        private void contactsRefreshIcon_Click(object sender, EventArgs e)
+        {
+            tryFillCOntactList();
+        }
     }
 }
