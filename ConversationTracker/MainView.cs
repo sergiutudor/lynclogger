@@ -259,6 +259,11 @@ namespace LyncLogger
 
         private void lstContacts_MouseDoubleClick(object sender, EventArgs e)
         {
+            if (lstContacts.SelectedIndex == -1)
+            {
+                return;
+            }
+
             Contact contact = displayedContacts[lstContacts.SelectedIndex];
             if (watchedContacts.Contains(contact))
             {
@@ -292,6 +297,10 @@ namespace LyncLogger
 
         private void lstWatched_MouseDoubleClick(object sender, EventArgs e)
         {
+            if (lstWatched.SelectedIndex == -1)
+            {
+                return;
+            }
             removeWatchedContact(lstWatched.SelectedIndex);
         }
 
