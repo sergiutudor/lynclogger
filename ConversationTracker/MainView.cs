@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.Lync.Model;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace LyncLogger
 {
@@ -24,6 +25,8 @@ namespace LyncLogger
 
         private Dictionary<int, Contact> displayedContacts = new Dictionary<int, Contact>();
         private List<Contact> watchedContacts = new List<Contact>();
+        private string currentUser;
+        LyncConnection Connection;
 
         public MainView(LyncConnection Connection)
         {
@@ -33,16 +36,13 @@ namespace LyncLogger
             minTray.Click += MinimizeTotray;
             LofFol.Click += openLogsFolder;
             FormClosing += onClose;
-
-            MaximizeBox = false;
-
+            
             LogBoxRich.ReadOnly = true;
 
             Text += " V" + Program.Version;
 
             contactsManager = new ContactsManager(Connection);
-
-            tryFillCOntactList();
+            this.Connection = Connection;
 
             //Display conversation history
             displayConversationHistory(ConversationLogger.getConversationsFiles());
@@ -169,6 +169,9 @@ namespace LyncLogger
                 LyncLogger.ShowBalloonTip(500);
                 this.Hide();
             }
+
+            logView.Width = Width - 500;
+            logView.Height = Height - 95;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -257,6 +260,89 @@ namespace LyncLogger
             System.Diagnostics.Process.Start(filePath);
         }
 
+        private void lstFiles_MouseClick(object sender, EventArgs e)
+        {
+            String logFolder = ConversationLogger.getLogFolder();
+            String filePrefix = ConversationLogger.logFilePrefix;
+
+            string filePath = logFolder + filePrefix + lstFiles.SelectedItem.ToString().Replace(" ", "") + ConversationLogger.logFileExtension;
+            if (!File.Exists(filePath))
+            {
+                System.Windows.Forms.MessageBox.Show("File doesn\'t exists");
+                return;
+            }
+
+
+            string text = System.IO.File.ReadAllText(@filePath);
+
+            this.logView.Text = "";
+            var rows = text.Split('\n');
+
+            currentUser = Connection.getCurrentUserName();
+            foreach (string row in rows)
+            {
+                this.formatRow(this.logView, row);
+            }
+
+            this.logView.Select(this.logView.Text.Length - 1, 0);
+            this.logView.ScrollToCaret();
+        }
+
+        private void formatRow(RichTextBox box, string text)
+        {
+            Color color = Color.Red;
+
+            // match date
+            Regex colorTest = new Regex("^(?<date>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2})");
+            MatchCollection matches = colorTest.Matches(text);
+            text = colorTest.Replace(text, "");
+
+            if (matches.Count > 0)
+            {
+                foreach (Match match in matches)
+                {
+                    GroupCollection groups = match.Groups;
+                    addColored(box, groups["date"].Value, Color.DarkBlue);
+                }
+
+                // match user
+                Regex nameTest = new Regex(@"^\s*(?<name>[^:]+):");
+                matches = nameTest.Matches(text);
+                text = nameTest.Replace(text, "");
+                foreach (Match match in matches)
+                {
+                    GroupCollection groups = match.Groups;
+                    Color nameColor;
+                    string name;
+
+                    if (groups["name"].Value == currentUser)
+                    {
+                        nameColor = Color.Green;
+                        name = "Me";
+                    }
+                    else
+                    {
+                        nameColor = Color.Red;
+                        name = groups["name"].Value;
+                    }
+
+                    addColored(box, " " + name + ":", nameColor);
+                }
+            }
+
+            addColored(box, text + "\n", Color.Black);
+        }
+
+        private void addColored(RichTextBox box, string text, Color color)
+        {
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.AppendText(text);
+            box.SelectionColor = box.ForeColor;
+        }
+
         private void lstContacts_MouseDoubleClick(object sender, EventArgs e)
         {
             if (lstContacts.SelectedIndex == -1)
@@ -313,6 +399,16 @@ namespace LyncLogger
         private void contactsRefreshIcon_Click(object sender, EventArgs e)
         {
             tryFillCOntactList();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lstFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

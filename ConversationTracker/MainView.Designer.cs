@@ -42,6 +42,7 @@
             this.lstWatched = new System.Windows.Forms.ListBox();
             this.contactsRefreshIcon = new System.Windows.Forms.PictureBox();
             this.refreshContactsToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.logView = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.contactsRefreshIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -92,6 +93,8 @@
             this.lstFiles.Name = "lstFiles";
             this.lstFiles.Size = new System.Drawing.Size(255, 340);
             this.lstFiles.TabIndex = 5;
+            this.lstFiles.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lstFiles_MouseClick);
+            this.lstFiles.SelectedIndexChanged += new System.EventHandler(this.lstFiles_SelectedIndexChanged);
             this.lstFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstFiles_MouseDoubleClick);
             // 
             // label1
@@ -165,11 +168,22 @@
             this.refreshContactsToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.refreshContactsToolTip.ToolTipTitle = "Refresh";
             // 
+            // logView
+            // 
+            this.logView.Location = new System.Drawing.Point(638, 53);
+            this.logView.Name = "logView";
+            this.logView.ReadOnly = true;
+            this.logView.Size = new System.Drawing.Size(691, 483);
+            this.logView.TabIndex = 13;
+            this.logView.Text = "";
+            this.logView.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(605, 550);
+            this.ClientSize = new System.Drawing.Size(1341, 551);
+            this.Controls.Add(this.logView);
             this.Controls.Add(this.contactsRefreshIcon);
             this.Controls.Add(this.lstWatched);
             this.Controls.Add(this.lstContacts);
@@ -205,5 +219,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox contactsRefreshIcon;
         private System.Windows.Forms.ToolTip refreshContactsToolTip;
+        private System.Windows.Forms.RichTextBox logView;
     }
 }

@@ -121,5 +121,18 @@ namespace LyncLogger
         public void Dispose()
         {
         }
+
+        public string getCurrentUserName()
+        {
+            try
+            {
+                return (string)client.ContactManager.GetContactByUri(client.Uri).GetContactInformation(ContactInformationType.DisplayName);
+            }
+            catch(Exception e)
+            {
+            }
+
+            return "";
+        }
     }
 }
