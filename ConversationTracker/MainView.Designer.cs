@@ -42,7 +42,10 @@
             this.lstWatched = new System.Windows.Forms.ListBox();
             this.contactsRefreshIcon = new System.Windows.Forms.PictureBox();
             this.refreshContactsToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.logView = new System.Windows.Forms.RichTextBox();
+            this.logView = new ScrollDetectRTF();
+            this.searchBox = new System.Windows.Forms.TextBox();
+            this.searchNext = new System.Windows.Forms.Button();
+            this.searchPrev = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.contactsRefreshIcon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -170,19 +173,48 @@
             // 
             // logView
             // 
-            this.logView.Location = new System.Drawing.Point(638, 53);
+            this.logView.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.logView.Location = new System.Drawing.Point(638, 87);
             this.logView.Name = "logView";
             this.logView.ReadOnly = true;
-            this.logView.Size = new System.Drawing.Size(691, 483);
+            this.logView.Size = new System.Drawing.Size(691, 449);
             this.logView.TabIndex = 13;
             this.logView.Text = "";
             this.logView.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // searchBox
+            // 
+            this.searchBox.Location = new System.Drawing.Point(638, 53);
+            this.searchBox.Name = "searchBox";
+            this.searchBox.Size = new System.Drawing.Size(214, 22);
+            this.searchBox.TabIndex = 14;
+            // 
+            // searchNext
+            // 
+            this.searchNext.Location = new System.Drawing.Point(895, 52);
+            this.searchNext.Name = "searchNext";
+            this.searchNext.Size = new System.Drawing.Size(31, 23);
+            this.searchNext.TabIndex = 15;
+            this.searchNext.Text = ">";
+            this.searchNext.UseVisualStyleBackColor = true;
+            // 
+            // searchPrev
+            // 
+            this.searchPrev.Location = new System.Drawing.Point(858, 52);
+            this.searchPrev.Name = "searchPrev";
+            this.searchPrev.Size = new System.Drawing.Size(31, 23);
+            this.searchPrev.TabIndex = 16;
+            this.searchPrev.Text = "<";
+            this.searchPrev.UseVisualStyleBackColor = true;
             // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1341, 551);
+            this.Controls.Add(this.searchPrev);
+            this.Controls.Add(this.searchNext);
+            this.Controls.Add(this.searchBox);
             this.Controls.Add(this.logView);
             this.Controls.Add(this.contactsRefreshIcon);
             this.Controls.Add(this.lstWatched);
@@ -219,6 +251,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox contactsRefreshIcon;
         private System.Windows.Forms.ToolTip refreshContactsToolTip;
-        private System.Windows.Forms.RichTextBox logView;
+        private ScrollDetectRTF logView;
+        private System.Windows.Forms.TextBox searchBox;
+        private System.Windows.Forms.Button searchNext;
+        private System.Windows.Forms.Button searchPrev;
     }
 }

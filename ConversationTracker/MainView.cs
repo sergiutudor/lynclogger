@@ -25,18 +25,20 @@ namespace LyncLogger
 
         private Dictionary<int, Contact> displayedContacts = new Dictionary<int, Contact>();
         private List<Contact> watchedContacts = new List<Contact>();
-        private string currentUser;
         LyncConnection Connection;
 
         public MainView(LyncConnection Connection)
         {
             InitializeComponent();
             Resize += MainView_Resize;
-            LyncLogger.DoubleClick += trayDoubleClick;
             minTray.Click += MinimizeTotray;
             LofFol.Click += openLogsFolder;
             FormClosing += onClose;
-            
+            searchBox.KeyUp += onSearch;
+            searchNext.Click += onNextSearch;
+            searchPrev.Click += onPrevSearch;
+            logView.onScroll += onLogScroll;
+
             LogBoxRich.ReadOnly = true;
 
             Text += " V" + Program.Version;
@@ -48,6 +50,33 @@ namespace LyncLogger
             displayConversationHistory(ConversationLogger.getConversationsFiles());
 
             Timer.SetInterval(delegate { checkWatched(); }, 5000);
+        }
+        
+        private void onLogScroll(object sender, EventArgs e)
+        {
+            if (logView.VerticalPosition < 300)
+            {
+                logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
+                renderer.loadRowBatch();
+            }
+        }
+
+        private void onNextSearch(Object sender, EventArgs args)
+        {
+            logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
+            renderer.shiftMatch(1);
+        }
+
+        private void onPrevSearch(Object sender, EventArgs args)
+        {
+            logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
+            renderer.shiftMatch(-1);
+        }
+
+        private void onSearch(Object sender, KeyEventArgs args)
+        {
+            logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
+            renderer.search(searchBox.Text);
         }
 
         private void checkWatched()
@@ -61,7 +90,7 @@ namespace LyncLogger
                     removeWatchedContact(key);
 
                     String displayName = contact.GetContactInformation(ContactInformationType.DisplayName).ToString();
-                    MessageBox.Show(displayName + " is now available for discussions.", "Contact available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(displayName + " is now available for discussions.", "Contact available", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     AppLogger.GetInstance().Info(contact.Uri + " appeared online");
 
                     return;
@@ -171,7 +200,7 @@ namespace LyncLogger
             }
 
             logView.Width = Width - 500;
-            logView.Height = Height - 95;
+            logView.Height = Height - 122;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -266,83 +295,10 @@ namespace LyncLogger
             String filePrefix = ConversationLogger.logFilePrefix;
 
             string filePath = logFolder + filePrefix + lstFiles.SelectedItem.ToString().Replace(" ", "") + ConversationLogger.logFileExtension;
-            if (!File.Exists(filePath))
-            {
-                System.Windows.Forms.MessageBox.Show("File doesn\'t exists");
-                return;
-            }
-
-
-            string text = System.IO.File.ReadAllText(@filePath);
-
-            this.logView.Text = "";
-            var rows = text.Split('\n');
-
-            currentUser = Connection.getCurrentUserName();
-            foreach (string row in rows)
-            {
-                this.formatRow(this.logView, row);
-            }
-
-            this.logView.Select(this.logView.Text.Length - 1, 0);
-            this.logView.ScrollToCaret();
+            logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
+            renderer.processFile(filePath);
         }
-
-        private void formatRow(RichTextBox box, string text)
-        {
-            Color color = Color.Red;
-
-            // match date
-            Regex colorTest = new Regex("^(?<date>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2})");
-            MatchCollection matches = colorTest.Matches(text);
-            text = colorTest.Replace(text, "");
-
-            if (matches.Count > 0)
-            {
-                foreach (Match match in matches)
-                {
-                    GroupCollection groups = match.Groups;
-                    addColored(box, groups["date"].Value, Color.DarkBlue);
-                }
-
-                // match user
-                Regex nameTest = new Regex(@"^\s*(?<name>[^:]+):");
-                matches = nameTest.Matches(text);
-                text = nameTest.Replace(text, "");
-                foreach (Match match in matches)
-                {
-                    GroupCollection groups = match.Groups;
-                    Color nameColor;
-                    string name;
-
-                    if (groups["name"].Value == currentUser)
-                    {
-                        nameColor = Color.Green;
-                        name = "Me";
-                    }
-                    else
-                    {
-                        nameColor = Color.Red;
-                        name = groups["name"].Value;
-                    }
-
-                    addColored(box, " " + name + ":", nameColor);
-                }
-            }
-
-            addColored(box, text + "\n", Color.Black);
-        }
-
-        private void addColored(RichTextBox box, string text, Color color)
-        {
-            box.SelectionStart = box.TextLength;
-            box.SelectionLength = 0;
-
-            box.SelectionColor = color;
-            box.AppendText(text);
-            box.SelectionColor = box.ForeColor;
-        }
-
+        
         private void lstContacts_MouseDoubleClick(object sender, EventArgs e)
         {
             if (lstContacts.SelectedIndex == -1)

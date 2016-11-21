@@ -8,6 +8,8 @@ namespace LyncLogger
     public class FileLoggerEventArgs : EventArgs
     {
         public Array files;
+        public string fileName;
+        public string message;
     }
 
     public class FileLogger
@@ -31,7 +33,7 @@ namespace LyncLogger
                 logException(e);
             }
 
-            triggerFileLogEvent();
+            triggerFileLogEvent(message, file);
         }
 
         private void logException(Exception e)
@@ -76,11 +78,13 @@ namespace LyncLogger
             }
         }
 
-        private void triggerFileLogEvent()
+        private void triggerFileLogEvent(string message, string file)
         {
             try
             {
                 FileLoggerEventArgs args = new FileLoggerEventArgs();
+                args.message = message.Trim();
+                args.fileName = file;
 
                 if (onLog != null)
                 {

@@ -8,7 +8,7 @@ namespace LyncLogger
     class Program
     {
         private static LyncConnection connection;
-        public static readonly String Version = "1.4.0";
+        public static readonly String Version = "1.4.1";
         
         private static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8DE-65F04E6BDE8F}");
         //[STAThread] // makes lync connection missbehave
@@ -25,6 +25,7 @@ namespace LyncLogger
                     AppLogger.GetInstance().onInfo += form.Log;
 
                     connection.logger.onLog += form.AddConversationFiles;
+                    connection.logger.onLog += logRenderer.onLogConversation;
                     connection.watchConnection();
 
                     Application.EnableVisualStyles();
