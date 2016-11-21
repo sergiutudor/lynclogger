@@ -38,6 +38,7 @@ namespace LyncLogger
             searchNext.Click += onNextSearch;
             searchPrev.Click += onPrevSearch;
             logView.onScroll += onLogScroll;
+            LyncLogger.DoubleClick += trayDoubleClick;
 
             LogBoxRich.ReadOnly = true;
 
@@ -274,7 +275,7 @@ namespace LyncLogger
             }
         }
 
-        private void lstFiles_MouseDoubleClick(object sender, EventArgs e)
+        private void lstFiles_openFile(object sender, EventArgs e)
         {
             String logFolder = ConversationLogger.getLogFolder();
             String filePrefix = ConversationLogger.logFilePrefix;
