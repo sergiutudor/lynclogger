@@ -20,6 +20,7 @@ namespace LyncLogger
         private int oldestRowIndex = -1;
         private string[] fileRows;
         private bool entireFileLoaded;
+        private string searchText;
 
         private static logRenderer instance;
 
@@ -91,6 +92,7 @@ namespace LyncLogger
             }
 
             oldestRowIndex = i;
+            findMatches(searchText);
         }
 
         public void addRowForFile(string row, string fileName){
@@ -173,27 +175,39 @@ namespace LyncLogger
 
         public void search(string searchText)
         {
-            string text = box.Text;
+            findMatches(searchText);
 
-            Regex nameTest = new Regex(@"(?i)(?<found>"+ searchText + ")");
-            searchMatches = nameTest.Matches(text);
-            text = nameTest.Replace(text, "");
-
-            if (searchMatches.Count > 0)
+            if (searchMatches != null && searchMatches.Count > 0)
             {
                 displyFound(searchMatches.Count - 1);
             }
             else
             {
-                box.Select(0, box.Text.Length - 1);
-                box.Select(box.Text.Length - 1, 0);
+                box.Select(Math.Max(box.Text.Length - 1, 0), 0);
                 highlightedIndex = -1;
             }
         }
 
+
+
+        private void findMatches(string searchText)
+        {
+            if (searchText.Length == 0)
+            {
+                searchMatches = null;
+                return;
+            }
+
+            this.searchText = searchText;
+            string text = box.Text;
+
+            Regex nameTest = new Regex(@"(?i)(?<found>" + searchText + ")");
+            searchMatches = nameTest.Matches(text);
+        }
+
         public void shiftMatch(int shift)
         {
-            if (searchMatches == null)
+            if (searchMatches == null || searchMatches.Count == 0)
             {
                 return;
             }
@@ -214,8 +228,12 @@ namespace LyncLogger
 
         private void displyFound(int index)
         {
-// TODO: clear search at content change and redo it
             highlightedIndex = index;
+
+            if (box.Text.Length == 0)
+            {
+                return;
+            }
 
             box.Select(0, box.Text.Length - 1);
             box.SelectionBackColor = Color.Transparent;
