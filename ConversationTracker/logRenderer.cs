@@ -42,6 +42,11 @@ namespace LyncLogger
 
         public void processFile(string fileName)
         {
+            if (currentFile == fileName)
+            {
+                return;
+            }
+
             if (!File.Exists(fileName))
             {
                 System.Windows.Forms.MessageBox.Show("File doesn\'t exists");
@@ -187,12 +192,10 @@ namespace LyncLogger
                 highlightedIndex = -1;
             }
         }
-
-
-
+        
         private void findMatches(string searchText)
         {
-            if (searchText.Length == 0)
+            if (searchText == null || searchText.Length == 0)
             {
                 searchMatches = null;
                 return;
