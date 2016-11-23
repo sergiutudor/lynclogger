@@ -35,6 +35,7 @@ namespace LyncLogger
             LofFol.Click += openLogsFolder;
             FormClosing += onClose;
             searchBox.KeyUp += onSearch;
+            searchBox.GotFocus += onSearchIntend;
             searchNext.Click += onNextSearch;
             searchPrev.Click += onPrevSearch;
             logView.onScroll += onLogScroll;
@@ -60,6 +61,12 @@ namespace LyncLogger
                 logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
                 renderer.loadRowBatch();
             }
+        }
+
+        private void onSearchIntend(object sender, EventArgs e)
+        {
+            logRenderer renderer = logRenderer.getInstance(this.logView, Connection.getCurrentUserName());
+            renderer.loadRowBatch(logRenderer.bigRowBatchSize);
         }
 
         private void onNextSearch(Object sender, EventArgs args)

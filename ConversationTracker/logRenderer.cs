@@ -16,7 +16,9 @@ namespace LyncLogger
         MatchCollection searchMatches;
         private int highlightedIndex = -1;
         private string currentFile;
-        private int rowBatchSize = 100;
+        public const int rowBatchSize = 1000;
+        public const int initialRowBatchSize = 100;
+        public const int bigRowBatchSize = 100000;
         private int oldestRowIndex = -1;
         private string[] fileRows;
         private bool entireFileLoaded;
@@ -61,17 +63,22 @@ namespace LyncLogger
 
             box.Text = "";
             fileRows = text.Split('\n');
-            loadRowBatch();
+            loadRowBatch(initialRowBatchSize);
 
             box.Select(box.Text.Length - 1, 0);
             box.ScrollToCaret();
         }
 
-        public void loadRowBatch()
+        public void loadRowBatch(int rowsToLoad = -1)
         {
-            if (entireFileLoaded)
+            if (entireFileLoaded || fileRows == null || fileRows.Count() == 0)
             {
                 return;
+            }
+
+            if (rowsToLoad == -1)
+            {
+                rowsToLoad = rowBatchSize;
             }
 
             int currentRow;
@@ -84,7 +91,7 @@ namespace LyncLogger
                 currentRow = oldestRowIndex;
             }
 
-            int boundry = Math.Max(-1, currentRow - rowBatchSize);
+            int boundry = Math.Max(-1, currentRow - rowsToLoad);
             int i;
             for (i = currentRow; i > boundry; i--)
             {
