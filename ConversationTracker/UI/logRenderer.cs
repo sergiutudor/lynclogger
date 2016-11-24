@@ -210,9 +210,30 @@ namespace LyncLogger
 
             this.searchText = searchText;
             string text = box.Text;
+            Regex nameTest;
 
-            Regex nameTest = new Regex(@"(?i)(?<found>" + searchText + ")");
+            try
+            {
+                // try first to do a regex search
+                nameTest = new Regex(@"(?i)(?<found>" + searchText + ")");
+            }
+            catch (System.ArgumentException)
+            {
+                // if regex fails do text mode search
+                nameTest = new Regex(@"(?i)(?<found>" + Regex.Escape(searchText) + ")");
+            }
+
             searchMatches = nameTest.Matches(text);
+        }
+
+        public int getMatchesCount()
+        {
+            if (searchMatches == null)
+            {
+                throw new Exception("Not a search");
+            }
+
+            return searchMatches.Count;
         }
 
         public void shiftMatch(int shift)

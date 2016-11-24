@@ -34,7 +34,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>lync.ico</ApplicationIcon>
+    <ApplicationIcon>UI\resources\lync.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -85,34 +85,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppLogger.cs" />
-    <Compile Include="ScrollDetectRTF.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="logRenderer.cs" />
-    <Compile Include="ContactsManager.cs" />
-    <Compile Include="FileLogger.cs" />
-    <Compile Include="MainView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainView.Designer.cs">
-      <DependentUpon>MainView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LyncConnection.cs" />
+    <Compile Include="app\AppLogger.cs" />
+    <Compile Include="config\debug.cs" />
+    <Compile Include="config\config.cs" />
+    <Compile Include="config\prod.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Timer.cs" />
-    <Compile Include="ConversationLogger.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="UI\ScrollDetectRTF.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\logRenderer.cs" />
+    <Compile Include="businessLogic\ContactsManager.cs" />
+    <Compile Include="app\FileLogger.cs" />
+    <Compile Include="UI\MainView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainView.Designer.cs">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="businessLogic\LyncConnection.cs" />
+    <Compile Include="businessLogic\Timer.cs" />
+    <Compile Include="businessLogic\ConversationLogger.cs" />
+    <Compile Include="app\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ConversationTracker_TemporaryKey.pfx" />
+    <None Include="app\App.config" />
+    <None Include="app\ConversationTracker_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -127,18 +129,22 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainView.resx">
-      <DependentUpon>MainView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainView.resx">
+      <DependentUpon>MainView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lync.ico" />
-    <None Include="Refresh-icon.png" />
+    <None Include="UI\resources\next.png" />
+    <None Include="UI\resources\prev_small.png" />
+    <None Include="UI\resources\next_small.png" />
+    <None Include="Resources\next.bmp" />
+    <Content Include="UI\resources\lync.ico" />
+    <None Include="UI\resources\Refresh-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
