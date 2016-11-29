@@ -57,15 +57,28 @@ namespace LyncLogger
             LastMessage = message;
             string messageToLog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "   " + message;
             string file = getFileName();
-            System.IO.File.AppendAllText(@file, messageToLog+"\r\n");
-
+            writeToFile(file, messageToLog+"\r\n");
             Console.WriteLine(messageToLog);
             return true;
         }
 
+        private void writeToFile(string file, string text)
+        {
+            try
+            {
+                System.IO.File.AppendAllText(@file, text+"\r\n");
+            }
+            catch
+            {
+                Console.WriteLine("ERROR: unable to write to " + file);
+            }
+        }
+
         public void Exception(Exception e)
         {
-            string message = "EXCEPTION: " + e.Message;
+
+            string message = "EXCEPTION: " + e.GetType();
+            message += "\r\n    MESSAGE: " + e.Message;
             message += "\r\n    SOURCE: " + e.Source;
             message += "\r\n    STACK: " + e.StackTrace;
             log(message);

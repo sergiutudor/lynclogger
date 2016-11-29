@@ -92,9 +92,6 @@ namespace LyncLogger
             catch (Exception e)
             {
                 AppLogger.GetInstance().Exception(e);
-                MessageBox.Show("The application crashed!\nYou can find more details in: "+AppLogger.GetInstance().getFileName(), "You broke it :(", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                System.Windows.Forms.Application.Exit();
-                System.Environment.Exit(1);
             }
         }
 
