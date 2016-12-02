@@ -57,7 +57,7 @@ namespace LyncLogger
             LastMessage = message;
             string messageToLog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "   " + message;
             string file = getFileName();
-            writeToFile(file, messageToLog+"\r\n");
+            writeToFile(file, messageToLog);
             Console.WriteLine(messageToLog);
             return true;
         }

@@ -125,7 +125,7 @@ namespace LyncLogger
             {
                 return (string)client.ContactManager.GetContactByUri(client.Uri).GetContactInformation(ContactInformationType.DisplayName);
             }
-            catch(Exception e)
+            catch(Exception)
             {
             }
 

@@ -8,7 +8,7 @@ namespace LyncLogger
     class Program
     {
         private static LyncConnection connection;
-        public static readonly String Version = "2.0.1";
+        public static readonly String Version = "2.0.2";
         
         private static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8DE-65F04E6BDE8F}");
         //[STAThread] // makes lync connection missbehave
